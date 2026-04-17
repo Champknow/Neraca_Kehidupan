@@ -101,18 +101,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =============================================
-# FUNGSI DATA
+# FUNGSI DATA (SUDAH DIPERBAIKI)
 # =============================================
 def load_categories():
     path = "data/categories.csv"
     if os.path.exists(path):
         return pd.read_csv(path)
     else:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         df = pd.DataFrame(columns=["id", "name", "type", "budget"])
         df.to_csv(path, index=False)
         return df
 
 def save_categories(df):
+    os.makedirs("data", exist_ok=True)
     df.to_csv("data/categories.csv", index=False)
 
 def load_transactions():
@@ -122,11 +124,13 @@ def load_transactions():
         df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d', errors='coerce')
         return df
     else:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         df = pd.DataFrame(columns=["id", "type", "category", "amount", "date", "note"])
         df.to_csv(path, index=False)
         return df
 
 def save_transaction(trans_type, category, amount, date, note):
+    os.makedirs("data", exist_ok=True)
     df = load_transactions()
     if df.empty:
         new_id = "TRX001"
@@ -150,6 +154,7 @@ def load_habits():
     if os.path.exists(path):
         return pd.read_csv(path)
     else:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         today = datetime.now().date()
         start_of_week = today - timedelta(days=today.weekday())
         dates = [start_of_week + timedelta(days=i) for i in range(7)]
@@ -163,6 +168,7 @@ def load_habits():
         return df
 
 def save_habit_status(habit_name, date_str, status):
+    os.makedirs("data", exist_ok=True)
     df = load_habits()
     mask = (df['habit_name'] == habit_name) & (df['date'] == date_str)
     if not df[mask].empty:
@@ -177,6 +183,7 @@ def load_goals():
     if os.path.exists(path):
         return pd.read_csv(path)
     else:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         df = pd.DataFrame([
             {"id": "GOAL001", "name": "Selesai project n8n", "target": 100, "current": 90, "unit": "%", "icon": "💻", "color": "#1D9E75"},
             {"id": "GOAL002", "name": "Baca 2 buku", "target": 2, "current": 1, "unit": "buku", "icon": "📚", "color": "#378ADD"},
@@ -186,6 +193,7 @@ def load_goals():
         return df
 
 def save_goals(df):
+    os.makedirs("data", exist_ok=True)
     df.to_csv("data/goals.csv", index=False)
 
 # =============================================
